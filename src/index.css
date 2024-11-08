@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "Roboto Light";
+  src:
+          local("Roboto Light"),
+          url("/fonts/Roboto-Light.ttf") format("truetype")
+}
+:root {
+  font-family: "Roboto Light", serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
