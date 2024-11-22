@@ -1,50 +1,69 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { useAuth } from "./useAuth.tsx";
 import ApiKey from "./Classes/ApiKey.tsx";
 
 export default function useApiKeys() {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [error, setError] = useState<Error | null>(null);
-  const [headers, setHeaders] = useState({});
+  const [loading, setLoading] = useState<boolean>(false);
   const { jwt } = useAuth();
 
-  useMemo(() => {
-    const headers = new Headers({ "Content-Type": "application/json" });
-    headers.append("Authorization", `${jwt}`);
-    setHeaders(headers);
-  }, [jwt]);
+  const changeApiKey = (updatedKey: ApiKey) => {
+    setApiKeys((prev) =>
+      prev.map((key) => (key.id === updatedKey.id ? updatedKey : key))
+    );
+  };
 
-  useEffect(() => {
+  const fetchApiKeys = useCallback(async () => {
+    setLoading(true);
     const options = {
       method: "GET",
-      headers: headers,
-    };
-    (async () => {
-      try {
-        const keys = await fetch(
-          "https://blog-api-production-2436.up.railway.app/users/api-keys",
-          options
-        );
-        const keyObject = await keys.json();
-        setApiKeys([...keyObject.keys]);
-      } catch (err) {
-        setError(err as Error);
-      }
-    })();
-  }, [headers, setApiKeys]);
-
-  const generateNewApiKey = async () => {
-    const options = {
-      method: "GET",
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${jwt}`,
+      },
     };
     try {
-      const apiKey = await fetch(
+      const response = await fetch(
+        "https://blog-api-production-2436.up.railway.app/users/api-keys",
+        options
+      );
+      const { keys, msg, success } = await response.json();
+      if (!success) {
+        return setError(new Error(msg));
+      }
+      setApiKeys([...keys]);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, [jwt]);
+
+  const getApiKeys = useCallback(async () => {
+    if (apiKeys.length === 0) {
+      await fetchApiKeys();
+    }
+    return apiKeys;
+  }, [apiKeys, fetchApiKeys]);
+
+  const generateNewApiKey = useCallback(async () => {
+    setLoading(true);
+    console.log(jwt);
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${jwt}`,
+      },
+    };
+    try {
+      const response = await fetch(
         "https://blog-api-production-2436.up.railway.app/users/api-key/new",
         options
       );
 
-      const { key, metaData, success, msg } = await apiKey.json();
+      const { key, metaData, success, msg } = await response.json();
       if (!success) {
         return setError(new Error(msg));
       }
@@ -62,11 +81,44 @@ export default function useApiKeys() {
       setApiKeys((prevKeys) => [...prevKeys, keyObject]);
     } catch (err) {
       setError(err as Error);
+    } finally {
+      setLoading(false);
     }
+  }, [jwt]);
+
+  const changeStatus = useCallback(
+    async (status: string, keyId: number) => {
+      setLoading(true);
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${jwt}`,
+        },
+        body: JSON.stringify({ status: status, apiId: keyId }),
+      };
+      try {
+        const response = await fetch(
+          "https://blog-api-production-2436.up.railway.app/users/api-key-status",
+          options
+        );
+        return await response.json();
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [jwt]
+  );
+  return {
+    apiKeys,
+    loading,
+    error,
+    generateNewApiKey,
+    getApiKeys,
+    fetchApiKeys,
+    changeStatus,
+    changeApiKey,
   };
-  return [apiKeys, error, generateNewApiKey] as [
-    ApiKey[],
-    Error | null,
-    () => Promise<void>
-  ];
 }

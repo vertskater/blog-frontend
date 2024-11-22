@@ -59,6 +59,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s;
+
 }
 
 .key-list button:hover {
@@ -67,4 +68,17 @@
 .error {
     margin: 1rem 0;
     color: lightcoral;
+}
+.btn-key-status {
+    width: 100%;
+    button {
+        background-color: inherit;
+        color: #333333;
+        transition: color 250ms ease-in-out;
+        border: 1px solid #333333;
+        &:hover {
+            background-color: inherit;
+            color: #007bff;
+        }
+    }
 }

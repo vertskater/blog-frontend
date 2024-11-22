@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setJwt(token);
     setRole(userRole);
   };
+
   const logout = () => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("role");

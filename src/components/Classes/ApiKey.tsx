@@ -64,4 +64,7 @@ export default class ApiKey {
   get usageCount(): number {
     return this._usageCount;
   }
+  set status(status: string) {
+    this._status = status;
+  }
 }

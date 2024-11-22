@@ -1,0 +1,52 @@
+.create-new {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+.table-container {
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.posts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.posts-table th,
+.posts-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.posts-table th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+}
+
+.posts-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.posts-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.posts-table td {
+    vertical-align: top;
+}
+
+.posts-table td:last-child {
+    text-align: center;
+}

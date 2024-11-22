@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "./useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import NavBar from "./root/NavBar.tsx";
 import Footer from "./root/Footer.tsx";
 import "../styles/LoginForm.css";
@@ -35,7 +35,7 @@ export default function Login() {
 
   return (
     <>
-      <NavBar />(
+      <NavBar />
       <div className="form-container">
         <h2 className="form-title">Login</h2>
         <form
@@ -61,7 +61,10 @@ export default function Login() {
           <button type="submit">Login</button>
         </form>
       </div>
-      <Footer />)
+      <span className="nav-link">
+        Not a User yet, <NavLink to="/register">Register now </NavLink>
+      </span>
+      <Footer />
     </>
   );
 }

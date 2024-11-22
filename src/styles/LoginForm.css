@@ -56,3 +56,12 @@
 .form-container button:hover {
     background-color: #0056b3;
 }
+.nav-link {
+    text-align: center;
+    display: block;
+    margin-top: 1rem;
+}
+.error {
+    color: palevioletred;
+    text-align: center;
+}
