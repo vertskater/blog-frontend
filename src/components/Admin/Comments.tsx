@@ -1,42 +1,24 @@
-import ApiKey from "../Classes/ApiKey.tsx";
 import { useLoaderData } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Post from "../Classes/Post.tsx";
-import "../../styles/Comments.css";
 import Comment from "../Classes/Comment.tsx";
-
-export async function loader(jwt: string | null, apiKeys: ApiKey[]) {
-  const keys = apiKeys.filter(
-    (key) => key.status === "ACTIVE" && key.usageCount < 1001
-  );
-  if (keys.length === 0)
-    return { msg: "no active api key found or usage limit exhausted" };
-  const options = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": keys[0]?.key,
-      Authorization: `${jwt}`,
-    },
-  };
-  const response = await fetch(
-    "https://blog-api-production-2436.up.railway.app/admin/posts/comments",
-    options
-  );
-  return await response.json();
-}
+import "../../styles/Comments.css";
 
 export default function Comments() {
   const data = useLoaderData() as {
     msg: string;
-    posts: Post;
+    posts: Post[];
     success: boolean;
   };
-  console.log(data.posts);
-  const [comments, setComments] = useState<Post[]>([]);
+
+  const [comments, setComments] = useState<Comment[]>([]);
   useEffect(() => {
-    setComments((data.posts as Post[]) || []);
-  }, [data.posts?.comments]);
+    const comments = data.posts
+      ?.map((post) => (post?.comments.length ? post?.comments : []))
+      .flat();
+    setComments(comments);
+  }, [data.posts]);
+
   return (
     <div className="table-container">
       <h2>Comments</h2>
@@ -52,7 +34,7 @@ export default function Comments() {
           </tr>
         </thead>
         <tbody>
-          {comments.map((comment) => (
+          {comments?.map((comment) => (
             <tr key={comment.id}>
               <td>{comment.id}</td>
               <td>{comment.content}</td>

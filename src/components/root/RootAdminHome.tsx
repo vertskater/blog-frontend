@@ -24,10 +24,10 @@ export default function RootAdminHome() {
               <NavLink to="/admin/comments">Comments</NavLink>
             </li>
             <li>
-              <a href="#">Users</a>
+              <NavLink to="/admin/users">Users</NavLink>
             </li>
             <li>
-              <a href="#">Api-Keys</a>
+              <NavLink to="/admin/keys">Api-Keys</NavLink>
             </li>
           </ul>
         </nav>

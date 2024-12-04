@@ -1,5 +1,10 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import { useAuth } from "./components/useAuth.tsx";
+import { useEffect } from "react";
 import useApiKeys from "./components/useApiKeys.tsx";
 import RootHome from "./components/root/RootHome";
 import RootAdminHome from "./components/root/RootAdminHome.tsx";
@@ -10,15 +15,37 @@ import Logout from "./components/Logout.tsx";
 import Dashboard from "./components/Admin/Dashboard.tsx";
 import ApiKeys from "./components/ApiKeys.tsx";
 import ErrorComponent from "./components/ErrorComponent.tsx";
-import Posts, { loader as postsLoader } from "./components/Admin/Posts.tsx";
+import ErrorComponentAuthorized from "./components/Error/ErrorComponentAuthorized.tsx";
+import Posts from "./components/Admin/Posts.tsx";
 import CreatePost from "./components/CreatePost.tsx";
-import Comments, {
-  loader as commentsLoader,
-} from "./components/Admin/Comments.tsx";
-import { useEffect } from "react";
+import Users from "./components/Admin/Users.tsx";
+import Comments from "./components/Admin/Comments.tsx";
+import ApiKeysAdmin from "./components/Admin/ApiKeysAdmin.tsx";
+
+import {
+  usersLoader,
+  commentsLoader,
+  postsLoader,
+  apiKeysLoader,
+} from "./loaders/loaders.tsx";
+
+function RoleProtectedRoute({
+  allowedRole,
+  userRole,
+  children,
+}: {
+  allowedRole: string;
+  userRole: string | null;
+  children: object;
+}) {
+  if (userRole !== allowedRole) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+  return <>{children}</>;
+}
 
 export default function Router() {
-  const { jwt } = useAuth();
+  const { jwt, role } = useAuth();
   const { apiKeys, getApiKeys } = useApiKeys();
 
   useEffect(() => {
@@ -57,7 +84,11 @@ export default function Router() {
     },
     {
       path: "/admin",
-      element: <RootAdminHome />,
+      element: (
+        <RoleProtectedRoute allowedRole="ADMIN" userRole={role}>
+          <RootAdminHome />
+        </RoleProtectedRoute>
+      ),
       children: [
         { index: true, element: <Dashboard /> },
         {
@@ -71,10 +102,24 @@ export default function Router() {
         },
         {
           path: "/admin/comments",
-          element: <Comments jwt={jwt} apiKeys={apiKeys} />,
+          element: <Comments />,
           loader: () => commentsLoader(jwt, apiKeys),
         },
+        {
+          path: "/admin/users",
+          element: <Users />,
+          loader: () => usersLoader(jwt),
+        },
+        {
+          path: "/admin/keys",
+          element: <ApiKeysAdmin />,
+          loader: () => apiKeysLoader(jwt),
+        },
       ],
+    },
+    {
+      path: "/unauthorized",
+      element: <ErrorComponentAuthorized message="Unauthorized access" />,
     },
   ]);
   return <RouterProvider router={router} />;
