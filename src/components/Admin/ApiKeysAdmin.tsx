@@ -15,11 +15,13 @@ export default function ApiKeysAdmin() {
   if (!data.success) {
     setError(new Error("Sorry, we could not load any api Keys"));
   }
+
   useEffect(() => {
     setLoading(true);
     setApiKeys(data.apiKeys);
     setLoading(false);
   }, [data]);
+
   return (
     <div className="key-list">
       {loading && <p>Loading Api Keys ...</p>}

@@ -27,6 +27,7 @@ import {
   commentsLoader,
   postsLoader,
   apiKeysLoader,
+  postsWithCommentsLoader,
 } from "./loaders/loaders.tsx";
 
 function RoleProtectedRoute({
@@ -72,8 +73,14 @@ export default function Router() {
       element: <RootHome />,
       children: [
         {
+          index: true,
+          element: <Blog />,
+          loader: () => postsWithCommentsLoader(jwt, apiKeys),
+        },
+        {
           path: "/blog",
           element: <Blog />,
+          loader: () => postsWithCommentsLoader(jwt, apiKeys),
         },
         {
           path: "/api-keys",
