@@ -1,50 +1,48 @@
-# React + TypeScript + Vite
+# Blog Frontend with React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a frontend blogging platform that combines a [backend API](https://github.com/vertskater/blog-api) built with Node.js and Express and a frontend built with React. It allows users to register, post comments, and view blog posts. Admins can manage posts, users, API keys, and comments through an admin dashboard.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### User Features
+- **Register and Login**: Users can sign up and log in.
+- **View Blog Posts**: Browse published blog posts.
+- **Comment on Posts**: Add comments to any post.
 
-## Expanding the ESLint configuration
+### Admin Features
+- **Admin Registration and Login**: Admins can sign up and log in to access the admin dashboard.
+- **Manage Posts**: Create, update, and delete blog posts.
+- **Manage Users**: View and manage registered users.
+- **Manage API Keys**: Generate and manage API keys for secure access.
+- **Manage Comments**: Moderate and delete comments.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## Technologies Used
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Backend
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **Node.js with Express**
+- **PostgreSQL** database managed with **Prisma ORM**
+- **JWT Authentication** with **Passport.js**
+- Hosted on **Railway**
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Frontend
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **React** with **React-Router**
+- Custom Hooks for API interaction
+- Modern UI design with responsive Components
+
+---
+
+## Licence
+
+This project is licenced under the [MIT Licence](https://opensource.org/license/mit)
+
+---
+
+## Acknowledgement
+
+- **Prisma** for seamless database management
+- **Railway** for hosting and deploying
+- **React** for building an interactive frontend
