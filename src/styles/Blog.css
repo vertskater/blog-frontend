@@ -50,3 +50,34 @@
     font-size: 0.9rem;
     color: #2c3e50;
 }
+
+form.hide {
+    display: none;
+}
+form.show {
+    display: block;
+}
+
+.create-new-comment {
+    background: #16a085;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+    &:hover {
+        background-color: #1bc4a5;
+    }
+}
+
+.close-comment {
+    color: #16a085;
+    padding: 1rem;
+    cursor: pointer;
+    display: block;
+    float: right;
+    font-weight: bolder;
+}

@@ -2,25 +2,32 @@ import { useEffect, useState } from "react";
 import Post from "./Classes/Post.tsx";
 import { useLoaderData } from "react-router-dom";
 import Comment from "./Classes/Comment.tsx";
+import AddComment from "./AddComment.tsx";
 
 import "../styles/Blog.css";
 
 export default function Blog() {
-  /* const { apiKeys, getApiKeys } = useApiKeys();
-  const { jwt } = useAuth();*/
   const data = useLoaderData() as {
     success: boolean;
     posts: Post[];
     msg: string;
   };
   const [posts, setPosts] = useState<Post[] | []>([]);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [postId, setPostId] = useState<number>(0);
 
   useEffect(() => {
     setPosts(data.posts?.filter((post) => post.published));
-    /* (async () => {
-      await getApiKeys();
-    })();*/
   }, [data]);
+
+  const showAddComment = (postId: number) => {
+    setIsVisible(true);
+    setPostId(postId);
+  };
+  const handleClose = () => {
+    setIsVisible(false);
+    setPostId(0);
+  };
 
   return (
     <>
@@ -44,6 +51,18 @@ export default function Blog() {
                 </div>
               </>
             )}
+            <button
+              className="create-new-comment"
+              onClick={() => showAddComment(post.id)}
+            >
+              Add Comment
+            </button>
+            {isVisible && postId === post.id && (
+              <span className="close-comment" onClick={() => handleClose()}>
+                close
+              </span>
+            )}
+            {isVisible && postId === post.id && <AddComment postId={postId} />}
           </aside>
         );
       })}

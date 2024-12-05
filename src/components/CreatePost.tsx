@@ -21,12 +21,10 @@ export default function CreatePost({
     const keys = apiKeys.filter(
       (key) => key.status === "ACTIVE" && key.usageCount < 1001
     );
-
     if (keys.length === 0)
       return setError(
         new Error("no active api key found or usage limit exhausted")
       );
-
     const options = {
       method: "POST",
       headers: {
@@ -43,7 +41,6 @@ export default function CreatePost({
     );
     if (response.ok) return navigate("/admin/posts");
     const errorMsg = await response.json();
-    console.log(errorMsg);
     setError(new Error(errorMsg.msg));
   };
 
